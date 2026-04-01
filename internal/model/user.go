@@ -7,7 +7,7 @@ type User struct {
 	Name          string    `gorm:"not null" json:"name"`
 	Email         string    `gorm:"uniqueIndex;not null" json:"email"`
 	Password      string    `json:"-"`
-	Role          Role      `gorm:"type:text;check:role IN ('user','admin');default:'user'"`
+	Role          Role      `gorm:"type:text;check:role IN ('user','admin');default:'user'" json:"role"`
 	EmailVerified bool      `gorm:"default:false" json:"is_email_verified"`
 	VerifyToken   string    `json:"-"`
 	CreatedAt     time.Time `json:"created_at"`

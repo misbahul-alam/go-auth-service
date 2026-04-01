@@ -5,6 +5,7 @@ import (
 	"github.com/misbahul-alam/go-auth-service/internal/config"
 	"github.com/misbahul-alam/go-auth-service/internal/database"
 	"github.com/misbahul-alam/go-auth-service/internal/model"
+	"github.com/misbahul-alam/go-auth-service/internal/routes"
 )
 
 func main() {
@@ -15,11 +16,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "ok",
-		})
-	})
+	routes.RegisterRoutes(r)
 
 	err := r.Run(":8080")
 

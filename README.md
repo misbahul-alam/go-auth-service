@@ -21,7 +21,7 @@ This project demonstrates core backend concepts like JWT authentication, passwor
 * Go (Golang)
 * Gin (HTTP framework)
 * GORM (ORM)
-* PostgreSQL
+* SQLite
 * JWT (Authentication)
 
 ---
