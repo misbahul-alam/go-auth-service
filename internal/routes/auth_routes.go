@@ -10,4 +10,5 @@ func RegisterAuthRoutes(r *gin.RouterGroup, h *handler.AuthHandler) {
 
 	auth.POST("/register", h.Register)
 	auth.POST("/login", h.Login)
+	auth.POST("/refresh-token", h.RefreshToken)
 }
