@@ -49,8 +49,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	RefreshToken := utils.GenerateRefreshToken(user.ID, string(user.Role))
 
 	c.JSON(200, gin.H{
-		"user":          user,
 		"access_token":  AccessToken,
 		"refresh_token": RefreshToken,
+		"type":          "Bearer",
 	})
 }

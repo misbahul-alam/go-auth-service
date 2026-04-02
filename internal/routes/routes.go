@@ -13,7 +13,11 @@ func RegisterRoutes(r *gin.Engine) {
 
 	userRepo := repository.NewUserRepository(database.DB)
 	authService := service.NewAuthService(userRepo)
-	userHandler := handler.NewAuthHandler(authService)
+	authHandler := handler.NewAuthHandler(authService)
 
-	RegisterAuthRoutes(api, userHandler)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+
+	RegisterAuthRoutes(api, authHandler)
+	RegisterUserRotes(api, userHandler)
 }

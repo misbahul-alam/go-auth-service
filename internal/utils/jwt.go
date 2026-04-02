@@ -45,3 +45,18 @@ func GenerateRefreshToken(userID uint, role string) string {
 
 	return tokenString
 }
+
+func ValidateToken(tokenString string) (*Claims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.JWT_SECRET), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	claims, ok := token.Claims.(*Claims)
+
+	if !ok || !token.Valid {
+		return nil, err
+	}
+	return claims, nil
+}
