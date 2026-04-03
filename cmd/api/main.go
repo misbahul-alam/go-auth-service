@@ -6,12 +6,14 @@ import (
 	"github.com/misbahul-alam/go-auth-service/internal/database"
 	"github.com/misbahul-alam/go-auth-service/internal/model"
 	"github.com/misbahul-alam/go-auth-service/internal/routes"
+	"github.com/misbahul-alam/go-auth-service/internal/validator"
 )
 
 func main() {
 
 	config.LoadEnv()
 	database.Connect()
+	validator.Init()
 	_ = database.DB.AutoMigrate(&model.User{})
 
 	r := gin.Default()

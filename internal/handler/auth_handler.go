@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/misbahul-alam/go-auth-service/internal/dto"
 	"github.com/misbahul-alam/go-auth-service/internal/service"
+	"github.com/misbahul-alam/go-auth-service/internal/utils"
+	"github.com/misbahul-alam/go-auth-service/internal/validator"
 )
 
 type AuthHandler struct {
@@ -18,8 +20,8 @@ func NewAuthHandler(service *service.AuthService) *AuthHandler {
 
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req dto.RegisterRequest
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if ok, errs := validator.ValidateRequest(c, &req); !ok {
+		c.JSON(http.StatusBadRequest, utils.Error("validation failed", errs))
 		return
 	}
 	err := h.service.Register(req.Name, req.Email, req.Password)
@@ -34,8 +36,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if ok, errs := validator.ValidateRequest(c, &req); !ok {
+		c.JSON(http.StatusBadRequest, utils.Error("validation failed", errs))
 		return
 	}
 
@@ -56,11 +58,10 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	var req dto.RefreshTokenRequest
 
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if ok, errs := validator.ValidateRequest(c, &req); !ok {
+		c.JSON(http.StatusBadRequest, utils.Error("validation failed", errs))
 		return
 	}
-
 	AccessToken, err := h.service.RefreshToken(req.RefreshToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
