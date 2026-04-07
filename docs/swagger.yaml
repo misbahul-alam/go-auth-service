@@ -1,0 +1,17 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: A simple authentication backend built with Golang, Gin, and GORM. This
+    project demonstrates core backend concepts like JWT authentication, password hashing,
+    and clean structure.
+  title: Go Auth Service
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  BearerAuth:
+    description: Type 'Bearer ' followed by your JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
