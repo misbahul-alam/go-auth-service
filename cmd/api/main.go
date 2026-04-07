@@ -1,6 +1,9 @@
 package main
 
 import (
+	"time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/misbahul-alam/go-auth-service/docs"
 	"github.com/misbahul-alam/go-auth-service/internal/config"
@@ -10,6 +13,9 @@ import (
 	"github.com/misbahul-alam/go-auth-service/internal/validator"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/ulule/limiter/v3"
+	mgin "github.com/ulule/limiter/v3/drivers/middleware/gin"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
 )
 
 // @title Go Auth Service
@@ -29,7 +35,17 @@ func main() {
 	validator.Init()
 	_ = database.DB.AutoMigrate(&model.User{})
 
+	rate := limiter.Rate{
+		Period: 1 * time.Minute,
+		Limit:  30,
+	}
+	store := memory.NewStore()
+	middleware := mgin.NewMiddleware(limiter.New(store, rate))
 	r := gin.Default()
+
+	r.ForwardedByClientIP = true
+	r.Use(cors.Default())
+	r.Use(middleware)
 
 	routes.RegisterRoutes(r)
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
